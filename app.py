@@ -3,7 +3,7 @@ import pdfkit
 from datetime import datetime
 import time
 
-from core import extract_article, generate_summary_prompt, generate_image, translate_title
+from core import extract_article, generate_summary, generate_image, translate_title
 from generate_pdf import generate_pdf_for_list
 
 
@@ -19,7 +19,7 @@ def index():
             start_time = time.time()
             article_title, article_text = extract_article(url)
             translated_title = translate_title(article_title)
-            summary, prompt = generate_summary_prompt(article_text)
+            summary, prompt = generate_summary(article_text)
             # image = 1
             image = generate_image(prompt)
             pdf_input_list.append((translated_title, summary, image, url))
@@ -27,6 +27,10 @@ def index():
             elapsed_time = end_time - start_time
             print(f'Finished processing {i+1} article elapsed time: {elapsed_time}')
         print(pdf_input_list)
+        all_summaries = ''
+        for summary in pdf_input_list:
+            all_summaries += (summary[1] + ' ')
+        print(all_summaries)
 
         # Generate PDF
         output_path = generate_pdf_for_list(pdf_input_list)
@@ -44,8 +48,6 @@ def index():
 
     return render_template('index.html')
 
-def generate_pdf(urls):
-    pass
 
 if __name__ == '__main__':
     app.run(debug=True)

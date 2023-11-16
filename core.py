@@ -26,7 +26,7 @@ def extract_article(url):
     article.parse()
     return article.title, article.text
 
-def generate_summary_prompt(article_text):
+def generate_summary(article_text):
     deployment_name = 'gpt4-deployment'
     
     # Create a chat completion request to generate a summary and DALL-E prompt
