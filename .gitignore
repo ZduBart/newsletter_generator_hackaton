@@ -1,0 +1,5 @@
+/.venv/
+tescik.py
+.env
+/backup/
+/__pycache__/
