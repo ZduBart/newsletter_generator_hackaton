@@ -3,7 +3,7 @@ import pdfkit
 from datetime import datetime
 import time
 
-from core import extract_article, generate_summary, generate_image, translate_title
+from core import extract_article, generate_summary, generate_image, translate_title, generate_opening, generate_summary_line
 from generate_pdf import generate_pdf_for_list
 
 
@@ -30,21 +30,17 @@ def index():
         all_summaries = ''
         for summary in pdf_input_list:
             all_summaries += (summary[1] + ' ')
-        print(all_summaries)
+        opening_text = generate_opening(all_summaries)
+        summary_line = generate_summary_line()
 
         # Generate PDF
-        output_path = generate_pdf_for_list(pdf_input_list)
+        output_path = generate_pdf_for_list(data_list=pdf_input_list, opening_text=opening_text, summary_text=summary_line)
         current_datetime = datetime.now()
         date_string = current_datetime.strftime("%Y-%m-%d_%H-%M-%S")
         filename = f"newsletter_gpt_{date_string}.pdf"
 
         #Create response
         return send_file(output_path, as_attachment=True, download_name=filename)
-        # response = make_response(pdf_content)
-        # response.headers['Content-Type'] = 'application/pdf'
-        # response.headers['Content-Disposition'] = 'attachment; filename=generated_document.pdf'
-
-        # return response
 
     return render_template('index.html')
 

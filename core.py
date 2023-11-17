@@ -33,7 +33,7 @@ def generate_summary(article_text):
     response = client.chat.completions.create(
         model=deployment_name,
         messages=[
-            {"role": "system", "content": 'You are an AI assistant specialized in writing summaries and generating DALL-E prompts based on provided information. Your responses should always be in JSON format, structured as follows: {"summary": "{your summary}", "prompt": "{your prompt for DALL-E}"}. Emphasize clarity and conciseness in summaries, and ensure that DALL-E prompts are creatively aligned with the summarys content. Summary must be always in Polish language, while the prompt for DALL-E must be in English.'},
+            {"role": "system", "content": 'You are an AI assistant specialized in writing summaries and generating DALL-E prompts based on provided information. Your responses should always be in JSON format, structured as follows: {"summary": "{your summary}", "prompt": "{your prompt for DALL-E}"}. Emphasize clarity and conciseness in summaries, and ensure that DALL-E prompts are creatively aligned with the summarys content. Summary must be always in Polish language and not longer than 75 words, while the prompt for DALL-E must be in English.'},
             {"role": "user", "content": article_text}
         ],
         max_tokens=1000
@@ -52,7 +52,7 @@ def translate_title(article_title):
     response = client.chat.completions.create(
         model=deployment_name,
         messages=[
-            {"role": "system", "content": 'Translate given title into polish'},
+            {"role": "system", "content": 'Translate given title into polish, if the title is already in polish language then dont make any changes.'},
             {"role": "user", "content": article_title}
         ],
         max_tokens=1000
@@ -71,20 +71,34 @@ def generate_image(prompt):
     response = client.images.generate(model=deployment_name, prompt=prompt, n=1, response_format="url")
     return response.data[0].url
 
+def generate_opening(all_articles):
+    deployment_name = 'gpt4-deployment'
+    
+    # Create a chat completion request to generate a summary and DALL-E prompt
+    response = client.chat.completions.create(
+        model=deployment_name,
+        messages=[
+            {"role": "system", "content": 'In around 50 words, given below summaries of newsletter articles write short general introducton and invite to read newsletter. Write in polish language'},
+            {"role": "user", "content": all_articles}
+        ],
+        max_tokens=1000)
+    return response.choices[0].message.content
+
+def generate_summary_line():
+    deployment_name = 'gpt4-deployment'
+    
+    response = client.chat.completions.create(
+        model=deployment_name,
+        messages=[
+            {"role": "system", "content": 'Write one short inspiring, motivational sentence about future of artificial inteligence and its use cases in everyday lives to use as newsletter summary. Write in polish language'}
+        ],
+        max_tokens=1000)
+    return response.choices[0].message.content
 
 
 def main():
-    url = get_article_url()
-    article_title, article_text = extract_article(url)
-    summary, prompt = generate_summary_prompt(article_text)
-    print(prompt)
-    print('\nText:', text)
-    print("\nTitle:", title)
-    print("\nSummary:", summary)
-    image = generate_image(prompt)
-    print(image)
-
+    # all_articles = 'Brazylijski rynek bankowości cyfrowej dynamicznie się rozwija. Nubank o wartości 30 miliardów dolarów ekspansywnie rośnie w całej Ameryce Łacińskiej. Inne cyfrowe banki, takie jak PicPay i Mercado Pago również zyskują popularność, a tradycyjne banki, takie jak Iti i Next wprowadzają swoje cyfrowe odpowiedniki. PagBank, cyfrowy oddział procesora płatności PagSeguro, zgłosił niemal 30 milionów klientów w Brazylii, co stawia go wśród pięciu największych neobanków w Ameryce Łacińskiej pod względem liczby klientów. Rynek cyfrowych banków w kraju zaczął wykazywać oznaki nasycenia, co skłoniło banki do zmiany strategii z szybkiego zdobywania klientów na zwiększanie rentowności. Revolut wprowadził do swojej oferty Inwestycje Pro (Trading Pro) dla zaawansowanych inwestorów w krajach Europejskiego Obszaru Gospodarczego, w tym w Polsce. Dzięki temu klienci mogą korzystać z niższych prowizji. Usługa kosztuje 15 euro miesięcznie, z wyjątkiem planu Ultra, gdzie jest bezpłatna. Inwestycje Pro umożliwiają wyżej limit zleceń kupna lub sprzedaży akcji i funduszy indeksowych ETF. Revolut zapewnił również klientom wydłużone godziny handlu na amerykańskim rynku.'
+    print(generate_summary_line())
 
 if __name__ == "__main__":
-   print(client)
-   print(generate_image('plaza'))
+    main()
