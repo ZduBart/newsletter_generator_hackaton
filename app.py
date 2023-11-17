@@ -31,7 +31,9 @@ def index():
         for summary in pdf_input_list:
             all_summaries += (summary[1] + ' ')
         opening_text = generate_opening(all_summaries)
+        print(opening_text)
         summary_line = generate_summary_line()
+        print(summary_line)
 
         # Generate PDF
         output_path = generate_pdf_for_list(data_list=pdf_input_list, opening_text=opening_text, summary_text=summary_line)
