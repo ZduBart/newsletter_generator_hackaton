@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        .container {
+            width: 60%;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #343a40;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        button {
+            margin-top: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #urlFields {
+            max-width: 400px;
+            margin: auto;
+        }
+    </style>
+    <script>
+        function addUrlField() {
+            var container = document.getElementById('urlFields');
+            var count = container.children.length / 2 + 1;
+
+            // Create a new label element
+            var label = document.createElement('label');
+            label.for = 'url' + count;
+            // label.innerHTML = 'URL ' + count + ':';
+
+            // Create a new input element
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.id = 'url' + count;
+            input.name = 'url' + count;
+            input.placeholder = 'Enter URL';
+
+            // Append the new label and input elements to the container
+            container.appendChild(label);
+            container.appendChild(input);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Newsletter generator</h1>
+        <form method="POST">
+            <div id="urlFields">
+                <!-- Initial URL input field -->
+                <!-- <label for="url1">URL 1:</label> -->
+                <input type="text" id="url1" name="url1" placeholder="Enter URL">
+            </div>
+
+            <!-- Button to add more URL input fields -->
+            <button type="button" onclick="addUrlField()">+</button>
+
+            <!-- Submit button -->
+            <button type="submit">Generate</button>
+        </form>
+    </div>
+</body>
+</html>

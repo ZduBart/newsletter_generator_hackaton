@@ -9,7 +9,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 
 def generate_pdf_for_list(data_list, opening_text, summary_text, output_path='C:/Users/Public/newsletter.pdf'):
     # Tworzenie nowego pliku PDF
-    pdf_doc = SimpleDocTemplate(output_path, pagesize=letter, leftMargin=0, rightMargin=0, topMargin=0)
+    pdf_doc = SimpleDocTemplate(output_path, pagesize=letter, leftMargin=0, rightMargin=0, topMargin=-6)
     styles = getSampleStyleSheet()
     pdfmetrics.registerFont(TTFont('Arial-Bold', 'arialbd.ttf'))
     pdfmetrics.registerFont(TTFont('Arial', 'arial.ttf'))
@@ -56,11 +56,13 @@ def generate_pdf_for_list(data_list, opening_text, summary_text, output_path='C:
         title_paragraph = Paragraph(text_with_link, title_style)
         txt_paragraph = Paragraph(text, txt_style)
         paragraphs = [
+        Spacer(1, 8),
         title_paragraph,
         txt_paragraph
         ]
+        imageData = [Spacer(1, 8), ImagePlatypus(image_path, width=180, height=180)]
         # Tworzenie tabeli z dwiema kolumnami (lewa - obrazek, prawa - tekst)
-        data = [[ImagePlatypus(image_path, width=180, height=180), paragraphs]]
+        data = [[imageData, paragraphs]]
         table = Table(data, colWidths=[200, 300], rowHeights=[200])
  
         # Usunięcie obramowania
